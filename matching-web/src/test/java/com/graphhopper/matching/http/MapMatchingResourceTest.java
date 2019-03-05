@@ -29,7 +29,6 @@ import org.junit.Test;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 import java.io.File;
-import java.io.InputStream;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -75,6 +74,15 @@ public class MapMatchingResourceTest {
         assertEquals(106.15, json.get("map_matching").get("time").asLong() / 1000f, 0.1);
         assertEquals(811.56, path.get("distance").asDouble(), 1);
         assertEquals(811.56, json.get("map_matching").get("distance").asDouble(), 1);
+    }
+
+    @Test
+    public void testGPX10() {
+        final Response response = app.client().target("http://localhost:8080/match")
+                .request()
+                .buildPost(Entity.xml(getClass().getResourceAsStream("gpxv1_0.gpx")))
+                .invoke();
+        assertEquals(200, response.getStatus());
     }
 
     @Test
